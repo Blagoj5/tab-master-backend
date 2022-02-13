@@ -22,6 +22,8 @@ export const main = async (url: string) => {
   const html = response.data;
   const $ = cheerio.load(html);
 
+  const favicon = $('* > link[rel="shortcut icon"]').attr('href');
+
   $(getSelector('h1')).map(function (_, el) {
     headers.h1.push($(el).text());
   });
@@ -39,5 +41,8 @@ export const main = async (url: string) => {
   return {
     headers,
     site: url,
+    favicon,
   };
 };
+
+main('https://fitnessdocumentation.com');
