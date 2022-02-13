@@ -1,32 +1,43 @@
-/**
- * Some predefined delay values (in milliseconds).
- */
-export enum Delays {
-  Short = 500,
-  Medium = 2000,
-  Long = 5000,
-}
+import cheerio from 'cheerio';
+import axios from 'axios';
+import { removeDuplicates } from './utilts';
 
-/**
- * Returns a Promise<string> that resolves after a given time.
- *
- * @param {string} name - A name.
- * @param {number=} [delay=Delays.Medium] - A number of milliseconds to delay resolution of the Promise.
- * @returns {Promise<string>}
- */
-function delayedHello(
-  name: string,
-  delay: number = Delays.Medium,
-): Promise<string> {
-  return new Promise((resolve: (value?: string) => void) =>
-    setTimeout(() => resolve(`Hello, ${name}`), delay),
-  );
-}
+const getSelector = (type: 'h1' | 'h2' | 'h3') => {
+  return `body ${type}`;
+};
 
-// Below are examples of using ESLint errors suppression
-// Here it is suppressing a missing return type definition for the greeter function.
+type Headers = {
+  h1: string[];
+  h2: string[];
+  h3: string[];
+};
+export const main = async (url: string) => {
+  const headers: Headers = {
+    h1: [],
+    h2: [],
+    h3: [],
+  };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export async function greeter(name: string) {
-  return await delayedHello(name, Delays.Long);
-}
+  const response = await axios.get(url);
+  const html = response.data;
+  const $ = cheerio.load(html);
+
+  $(getSelector('h1')).map(function (_, el) {
+    headers.h1.push($(el).text());
+  });
+  $(getSelector('h2')).map(function (_, el) {
+    headers.h2.push($(el).text());
+  });
+  $(getSelector('h3')).map(function (_, el) {
+    headers.h3.push($(el).text());
+  });
+
+  headers.h1 = removeDuplicates(headers.h1);
+  headers.h2 = removeDuplicates(headers.h2);
+  headers.h3 = removeDuplicates(headers.h3);
+
+  return {
+    headers,
+    site: url,
+  };
+};
