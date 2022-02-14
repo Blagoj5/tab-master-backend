@@ -5,8 +5,10 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/cheerio": "^0.22.31",
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/jest": "~27.0.2",
+    "@types/morgan": "^1.9.3",
     "@types/node": "~16.11.6",
     "@typescript-eslint/eslint-plugin": "~5.7.0",
     "@typescript-eslint/parser": "~5.7.0",
@@ -36,10 +38,11 @@
   "dependencies": {
     "axios": "^0.26.0",
     "cheerio": "^1.0.0-rc.10",
+    "cors": "^2.8.5",
     "express": "^4.17.2",
-    "tslib": "~2.3.1",
-    "xmldom": "^0.6.0",
-    "xpath": "^0.0.32"
+    "helmet": "^5.0.2",
+    "morgan": "^1.10.0",
+    "tslib": "~2.3.1"
   },
   "volta": {
     "node": "16.13.0"
